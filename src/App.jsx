@@ -1,5 +1,5 @@
 import "./App.css";
-
+import { Analytics } from "@vercel/analytics/next"
 import Form from "./components/Form";
 
 function App() {
@@ -17,6 +17,7 @@ function App() {
       <main>
         <Form />
       </main>
+      <Analytics />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import {
   Page,
   Text,
@@ -7,7 +7,6 @@ import {
   Document,
   StyleSheet,
   Font,
-  PDFDownloadLink,
 } from "@react-pdf/renderer";
 
 Font.registerHyphenationCallback((word) => ["", word, ""]);
@@ -15,9 +14,11 @@ Font.registerHyphenationCallback((word) => ["", word, ""]);
 // Create styles
 const styles = StyleSheet.create({
   page: {
-    margin: "80px",
     backgroundColor: "#FFFFFF",
     fontFamily: "Times-Roman",
+  },
+  pageContent: {
+    margin: "80px",
   },
   section: {
     maxWidth: 435,
@@ -88,12 +89,11 @@ const styles = StyleSheet.create({
     maxWidth: 435,
   },
   image: {
-    marginLeft: 138,
-    marginRight: 138,
-    marginTop: 80,
-    marginBottom: 80,
-    maxWidth: 160,
-    maxHeight: 160,
+    alignSelf: "center",
+    marginTop: 40,
+    marginBottom: 40,
+    maxWidth: 360,
+    maxHeight: 200,
   },
   textBlock: {
     fontSize: 14,
@@ -114,12 +114,54 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontSize: 14,
   },
+  outerFrame: {
+    position: "absolute",
+    top: "1.25cm",
+    left: "1.25cm",
+    right: "1.25cm",
+    bottom: "1.25cm",
+    borderWidth: "1.1mm",
+    borderColor: "#000000",
+    borderStyle: "solid",
+  },
+  innerFrame: {
+    position: "absolute",
+    top: "1.56cm",
+    left: "1.56cm",
+    right: "1.56cm",
+    bottom: "1.56cm",
+    borderWidth: "0.4mm",
+    borderColor: "#000000",
+    borderStyle: "solid",
+  },
 });
 
+const PageFrame = () => (
+  <>
+    <View style={styles.outerFrame} />
+    <View style={styles.innerFrame} />
+  </>
+);
+
 // Create Document Component
-const PDF = ({ studentName, grade, projectName, subject, teacher, year }) => (
-  <Document>
+const ProjectPDF = ({
+  studentName,
+  grade,
+  projectName,
+  subject,
+  teacher,
+  teacherSubject,
+  year,
+}) => {
+  const teacherLabel = teacherSubject
+    ? `${teacher}, ${teacherSubject} Faculty`
+    : teacher;
+
+  return (
+    <Document>
     <Page size="A4" style={styles.page}>
+      <PageFrame />
+      <View style={styles.pageContent}>
       <View style={styles.section}>
         <Text style={styles.largeBoldSpaced}>
           {subject.includes(" (Practical)")
@@ -142,7 +184,7 @@ const PDF = ({ studentName, grade, projectName, subject, teacher, year }) => (
         </Text>
       </View>
       <View style={styles.logo}>
-        <Image src="/gps.png" style={styles.image} />
+        <Image src="/gps-logo.png" style={styles.image} />
       </View>
       <View style={styles.section}>
         <Text style={styles.largeBoldSpaced}>
@@ -152,8 +194,11 @@ const PDF = ({ studentName, grade, projectName, subject, teacher, year }) => (
         <Text style={styles.large}>Bekal</Text>
         <Text style={styles.large}>FEBRUARY {year}</Text>
       </View>
+      </View>
     </Page>
     <Page size="A4" style={styles.page}>
+      <PageFrame />
+      <View style={styles.pageContent}>
       <View style={styles.section}>
         <Text style={styles.largeBoldSpaced}>DECLARATION</Text>
         <Text style={styles.textBlock}>
@@ -164,7 +209,8 @@ const PDF = ({ studentName, grade, projectName, subject, teacher, year }) => (
             <Text style={styles.textBold}>{projectName}</Text>
           )}
           {!subject.includes(" (Practical)") && '"'} is based on my work carried
-          out during the course of our study under the supervision of {teacher}.
+          out during the course of our study under the supervision of{" "}
+          {teacherLabel}.
         </Text>
         <Text style={styles.textBlock}>
           I assert the statement made and conclusions drawn are an outcome of my
@@ -197,17 +243,20 @@ const PDF = ({ studentName, grade, projectName, subject, teacher, year }) => (
         </View>
         <Text style={styles.textRightBold}>{studentName.toUpperCase()}</Text>
       </View>
+      </View>
     </Page>
     <Page size="A4" style={styles.page}>
+      <PageFrame />
+      <View style={styles.pageContent}>
       <View style={styles.section}>
-        <Text style={styles.largeBold}>GREENWOODS PUBLIC SCHOOL</Text>
-        <Text style={styles.largeBoldSpaced}>BEKAL</Text>
+        {/* <Text style={styles.largeBold}>GREENWOODS PUBLIC SCHOOL</Text>
+        <Text style={styles.largeBoldSpaced}>BEKAL</Text> */}
         <Text style={styles.largeBoldSpaced}>
-          DEPARTMENT OF SECONDARY LEVEL
+          SECONDARY LEVEL DEARTMENT
         </Text>
       </View>
       <View style={styles.logo}>
-        <Image src="/gps.png" style={styles.image} />
+        <Image src="/gps-logo.png" style={styles.image} />
       </View>
       <View style={styles.section}>
         <Text style={styles.largeBoldSpaced}>CERTIFICATE</Text>
@@ -221,7 +270,7 @@ const PDF = ({ studentName, grade, projectName, subject, teacher, year }) => (
             <Text style={styles.textBold}>{projectName}</Text>
           )}
           {!subject.includes(" (Practical)") && '"'} under the guidance of{" "}
-          {teacher} during the year {year - 1}-{year}
+          {teacherLabel} during the year {year - 1}-{year}
           {grade === "XII" &&
             ` in partial fulfillment of ` +
               (subject.includes(" (Practical)")
@@ -251,8 +300,11 @@ const PDF = ({ studentName, grade, projectName, subject, teacher, year }) => (
       <View style={[styles.section, { marginTop: "40px" }]}>
         <Text style={styles.text}>Principal:</Text>
       </View>
+      </View>
     </Page>
     <Page size="A4" style={styles.page}>
+      <PageFrame />
+      <View style={styles.pageContent}>
       <View style={styles.section}>
         <Text style={styles.largeBoldSpaced}>ACKNOWLEDGEMENT</Text>
         <Text style={styles.textBlock}>
@@ -269,7 +321,7 @@ const PDF = ({ studentName, grade, projectName, subject, teacher, year }) => (
           our principal <Text style={styles.textBold}>Mr. Ganesh Kattayat</Text>
           , for his enthusiastic help, valuable suggestions and constant
           encouragement throughout my work. I owe my profound gratitude to our
-          HM <Text style={styles.textBold}>Mrs. Sreeja V</Text> (Secondary Level
+          HM <Text style={styles.textBold}>Mrs. Sreeja V</Text> (HS & HSS
           Section) for her valuable suggestions and support.
         </Text>
         <Text style={styles.textBlock}>
@@ -277,8 +329,8 @@ const PDF = ({ studentName, grade, projectName, subject, teacher, year }) => (
           {subject.includes(" (Practical)") ? "practical" : "project"}{" "}
           coordinator
           {teacher.toLowerCase().includes("and") && "s"}{" "}
-          <Text style={styles.textBold}>{teacher}</Text>, Secondary Level
-          Section, for their timely guidance and support throughout this work.
+          <Text style={styles.textBold}>{teacherLabel}</Text>, for their timely
+          guidance and support throughout this work.
         </Text>
         <Text style={styles.textBlock}>
           I thank God almighty for all the blessings received during this
@@ -292,8 +344,20 @@ const PDF = ({ studentName, grade, projectName, subject, teacher, year }) => (
         <Text style={styles.text}>Date:</Text>
         <Text style={[styles.text, { marginTop: "10px" }]}>Place:</Text>
       </View>
+      </View>
     </Page>
   </Document>
-);
+  );
+};
 
-export default PDF;
+ProjectPDF.propTypes = {
+  studentName: PropTypes.string.isRequired,
+  grade: PropTypes.string.isRequired,
+  projectName: PropTypes.string,
+  subject: PropTypes.string.isRequired,
+  teacher: PropTypes.string.isRequired,
+  teacherSubject: PropTypes.string,
+  year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+};
+
+export default ProjectPDF;

@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 import { pdf } from "@react-pdf/renderer";
 
-import PDF from "./PDF";
+import { teachers } from "../data/teachers";
+import ProjectPDF from "./PDF";
 
 function Form() {
   // Practical Records must be marked as "<subject> (Practical)"
@@ -38,18 +40,9 @@ function Form() {
 
   const [projectNameEnabled, setProjectNameEnabled] = useState(true);
 
-  const [teachersList, setTeachersList] = useState(["Steve Smith"]);
-  useEffect(() => {
-    if (import.meta.env.VITE_TEACHERS) {
-      setTeachersList(import.meta.env.VITE_TEACHERS.split(","));
-    } else {
-      console.log("No environment variable VITE_TEACHERS found");
-    }
-  }, []);
-
   const [formFilled, setFormFilled] = useState(false);
   const checkFormFilled = () => {
-    const inputFields = document.querySelectorAll(".input:required");
+    const inputFields = document.querySelectorAll("[required]");
     let isFormFilled = true;
     inputFields.forEach((inputField) => {
       if (inputField.value === "") {
@@ -130,26 +123,27 @@ function Form() {
         )}
         <div className="field">
           <label>Teacher</label>
-          <input
-            className="input"
+          <select
             id="teacher"
-            type="text"
             value={teacher}
-            placeholder="Subject teacher's name"
-            list="teacher-names"
             onChange={(event) => {
               setTeacher(event.target.value);
               setFormFilled(checkFormFilled());
             }}
             required
-          />
-          <datalist id="teacher-names">
-            {teachersList.map((teacherName) => (
-              <option value={teacherName} key={teacherName}>
-                {teacherName}
+          >
+            <option value="" disabled>
+              Select a teacher
+            </option>
+            {teachers.map((teacherInfo) => (
+              <option
+                value={teacherInfo.name}
+                key={`${teacherInfo.name}-${teacherInfo.subject}`}
+              >
+                {teacherInfo.name} — {teacherInfo.subject}
               </option>
             ))}
-          </datalist>
+          </select>
         </div>
         <div className="field">
           <label>Year</label>
@@ -169,7 +163,15 @@ function Form() {
       {formFilled && (
         <>
           <DownloadButton
-            projectInfo={{ student, project, grade, subject, teacher, year }}
+            projectInfo={{
+              student,
+              project,
+              grade,
+              subject,
+              teacher,
+              teacherSubject: teachers.find((t) => t.name === teacher)?.subject,
+              year,
+            }}
           />
           <p className="verify">
             ⓘ Please verify the details in the PDF carefully
@@ -187,12 +189,13 @@ function DownloadButton({ projectInfo }) {
       type="button"
       onClick={async () => {
         const blob = await pdf(
-          <PDF
+          <ProjectPDF
             studentName={projectInfo.student}
             grade={projectInfo.grade}
             projectName={projectInfo.project}
             subject={projectInfo.subject}
             teacher={projectInfo.teacher}
+            teacherSubject={projectInfo.teacherSubject}
             year={projectInfo.year}
           />,
         ).toBlob();
@@ -219,5 +222,17 @@ function DownloadButton({ projectInfo }) {
     </button>
   );
 }
+
+DownloadButton.propTypes = {
+  projectInfo: PropTypes.shape({
+    student: PropTypes.string.isRequired,
+    project: PropTypes.string,
+    grade: PropTypes.string.isRequired,
+    subject: PropTypes.string.isRequired,
+    teacher: PropTypes.string.isRequired,
+    teacherSubject: PropTypes.string,
+    year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  }).isRequired,
+};
 
 export default Form;

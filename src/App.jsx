@@ -6,8 +6,13 @@ function App() {
   return (
     <>
       <header>
-        <img className="logo" src="/gps.png" alt="GPS logo" />
-        <h1>Project Front Page Generator</h1>
+        <div className="brand">
+          <img className="logo" src="/gps.png" alt="GPS logo" />
+          <div>
+            <h1>Project Front Page Generator</h1>
+            <p className="tagline">Clean, ready-to-print project boilerplates</p>
+          </div>
+        </div>
       </header>
       <main>
         <Form />

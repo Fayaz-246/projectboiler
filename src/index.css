@@ -1,13 +1,68 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --cream: #ece6dc;
+  --ink: #050505;
+  --olive: #7a8c3f;
+
+  --cream-soft: #f6f2ea;
+  --surface: #fdfbf7;
+  --muted: rgba(5, 5, 5, 0.58);
+  --border: rgba(5, 5, 5, 0.1);
+  --olive-soft: rgba(122, 140, 63, 0.14);
+
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 24px 60px -28px rgba(5, 5, 5, 0.45);
+  --shadow-button: 0 14px 30px -12px rgba(122, 140, 63, 0.75);
+
+  color-scheme: light;
+}
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Roboto", sans-serif;
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: #f0fdfa;
-  color: #042f2e;
+  min-height: 100vh;
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(
+      circle at 12% -10%,
+      rgba(122, 140, 63, 0.22),
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 92% 8%,
+      rgba(122, 140, 63, 0.12),
+      transparent 36%
+    ),
+    radial-gradient(
+      circle at 50% 120%,
+      rgba(5, 5, 5, 0.06),
+      transparent 55%
+    );
+  background-attachment: fixed;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--olive);
+  color: var(--ink);
+}
+
+*:focus-visible {
+  outline: 3px solid var(--olive);
+  outline-offset: 2px;
 }

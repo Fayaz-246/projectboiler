@@ -192,6 +192,7 @@ const ProjectPDF = ({
         </Text>
         <Text style={styles.large}>Greenwoods Public School</Text>
         <Text style={styles.large}>Bekal</Text>
+        <Text style={styles.large}>{"\n"}</Text>
         <Text style={styles.large}>FEBRUARY {year}</Text>
       </View>
       </View>

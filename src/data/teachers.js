@@ -5,4 +5,5 @@ export const teachers = [
   { name: "Mrs. Harsha K P", subject: "Biology" },
   { name: "Mr. Mohammed Naheemuddin M A", subject: "Computer Science" },
   { name: "Mrs. Vidya P", subject: "English Language" },
+  { name: "Mrs. Sreeja V", subject: "English Language" },
 ];

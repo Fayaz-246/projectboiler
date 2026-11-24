@@ -16,10 +16,6 @@ function Form() {
     "Biology",
     "Computer Science",
     "Computer Science (Practical)",
-    "Accounts",
-    "Commerce",
-    "Economics",
-    "Political Science",
   ];
 
   const getCurrentAcademicYear = () => {

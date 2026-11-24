@@ -28,7 +28,7 @@ function Form() {
   };
 
   const [student, setStudent] = useState("");
-  const [grade, setGrade] = useState("XII");
+  const [grade, setGrade] = useState("XI");
   const [project, setProject] = useState("");
   const [subject, setSubject] = useState(subjectsList[0]);
   const [teacher, setTeacher] = useState("");

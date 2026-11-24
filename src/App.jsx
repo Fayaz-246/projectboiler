@@ -1,5 +1,5 @@
 import "./App.css";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react"
 import Form from "./components/Form";
 
 function App() {
